@@ -19,7 +19,6 @@ exports.main = async (event, context) => {
     // outId: event.partnerId._.or(openid)
     outId: _.or(_.eq(openid), _.eq(event.partnerId))
   }])).get()
-  console.log(list)
   list.data.map(v => {
     if (v.enterId === wxContext.OPENID) {
       v.status = 1

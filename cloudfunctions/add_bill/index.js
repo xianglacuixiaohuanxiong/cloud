@@ -25,7 +25,7 @@ exports.main = async (event, context) => {
           enterId: wxContext.OPENID,
           outId: v.openid,
           outName: v.name,
-          money: (event.moeny / event.menber.length).toFixed(2)
+          money: Number((event.moeny / event.menber.length).toFixed(2))
         }
       })
       isConfirm.push(promise)
