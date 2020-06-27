@@ -1,0 +1,10 @@
+<van-popup show="{{ isShow }}" round position="bottom" bind:click-overlay="popStatus">
+  <view class="setting">
+    <text class="login-text">点击登录开启记账之旅!!!</text>
+    <button
+      class="userBtn"
+      open-type="getUserInfo"
+      lang="zh_CN"
+      bindgetuserinfo="getUserInfo">微信授权登录</button>
+  </view>
+</van-popup>

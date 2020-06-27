@@ -1,159 +1,156 @@
-//index.js
-const app = getApp()
+const app = getApp();
 import api from '../../api/index'
+import notification from '../../utils/wxNotification'
+import { auth, addPartner } from '../../utils/util'
+import { Toast, routerPush, getStorage, setData } from "../../utils/wx";
 Page({
   data: {
-    avatarUrl: './user-unlogin.png',
-    userInfo: {},
-    logged: false,
-    takeSession: false,
-    requestResult: ''
-  },
-
-  onLoad: function() {
-    if (!wx.cloud) {
-      wx.redirectTo({
-        url: '../chooseLib/chooseLib',
-      })
-      return
+    isAuthPop: false,
+    isAuth: false,
+    nickName: '点击头像登录',
+    avatarUrl: '../../assets/img/user.png',
+    //  列表
+    list: [
+      { title: '好友列表', type: 'buddy' },
+      { title: '账单记录', type: 'bill' },
+    ],
+    isLoading: true,  //  是否加载中
+    billShow: false,  //  是否显示添加账单
+    //  传递的值
+    form: {
+      detailsMsg: '',
+      number: '',
+      buddyNameList: [],
+      buddyIdList: []
     }
-
-    // 获取用户信息
-    wx.getSetting({
-      success: res => {
-        if (res.authSetting['scope.userInfo']) {
-          // 已经授权，可以直接调用 getUserInfo 获取头像昵称，不会弹框
-          wx.getUserInfo({
-            success: res => {
-              this.setData({
-                avatarUrl: res.userInfo.avatarUrl,
-                userInfo: res.userInfo
-              })
-            }
-          })
-        }
-      }
-    })
   },
-  //  获取用户id
-  getUserId() {
-    return new Promise((resolve, reject) => {
-      wx.cloud.callFunction({
-        name: 'login',
-        data: {},
-        success: res => {
-          app.globalData.openid = res.result.openid;
-          resolve(res.result.openid)
-        },
-        fail: err => {
-          reject(`调用失败`)
-          console.error('[云函数] [login] 调用失败', err)
+  onLoad (query) {
+    const that = this;
+    //  注册通知
+    if (query.id) app.globalData.partnerId = query.id;
+    auth()
+      .then(_ => {
+        if (query.id) addPartner();
+        setData.call(that, {
+          isAuth: true,
+          nickName: app.globalData.userInfo.nickName,
+          avatarUrl: app.globalData.userInfo.avatarUrl,
+        })
+      })
+      .catch(err => {
+        if (!err) {
+          //  没有授权
+        } else {
+          //  别的情况
         }
       })
-    })
-  },
-  //  获取用户信息
-  async getUserInfo(e) {
-    if (!this.data.logged && e.detail.userInfo) {
-      const res = await api.login();
-      let userInfo = e.detail.userInfo;
-      userInfo.openid = res.openid;
-      const data = await api.setUserInfo(userInfo);
-      console.log(data)
-      // this.getUserId().then(res => {
-      //   console.log(res)
-      //   console.log(e.detail.userInfo)
-      //   let userInfo = e.detail.userInfo;
-      //   userInfo.openid = res;
-      //   console.log(userInfo)
-      //   wx.cloud.callFunction({
-      //     name: 'set_userInfo',
-      //     data: userInfo,
-      //     success: result => {
-      //       console.log(result)
-      //     }
-      //   })
-      // })
-      this.setData({
-        logged: true,
-        avatarUrl: e.detail.userInfo.avatarUrl,
-        userInfo: e.detail.userInfo
+      .finally(() => {
+        setData.call(that, { isLoading: false })
       })
-    }
   },
-  onGetUserInfo: function(e) {
-    if (!this.data.logged && e.detail.userInfo) {
-      this.setData({
-        logged: true,
-        avatarUrl: e.detail.userInfo.avatarUrl,
-        userInfo: e.detail.userInfo
-      })
-    }
+  onShow () {
+    //
   },
-
-  onGetOpenid: function() {
-    // 调用云函数
-    api.login().then(res => {
-      app.globalData.openid = res.openid;
-      wx.navigateTo({
-        url: '../userConsole/userConsole',
-      })
-    }).catch(err => {
-      console.error('[云函数] [login] 调用失败', err)
-      wx.navigateTo({
-        url: '../deployFunctions/deployFunctions',
-      })
-    })
+  //  双向绑定数据
+  inputChange(e) {
+    const key = e.currentTarget.dataset.key;
+    const val = `form.${key}`
+    setData.call(this, { [val]: e.detail })
   },
-
-  // 上传图片
-  doUpload: function () {
-    // 选择图片
-    wx.chooseImage({
-      count: 1,
-      sizeType: ['compressed'],
-      sourceType: ['album', 'camera'],
-      success: function (res) {
-
-        wx.showLoading({
-          title: '上传中',
-        })
-
-        const filePath = res.tempFilePaths[0]
-
-        // 上传图片
-        const cloudPath = 'my-image' + filePath.match(/\.[^.]+?$/)[0]
-        wx.cloud.uploadFile({
-          cloudPath,
-          filePath,
-          success: res => {
-            console.log('[上传文件] 成功：', res)
-
-            app.globalData.fileID = res.fileID
-            app.globalData.cloudPath = cloudPath
-            app.globalData.imagePath = filePath
-
-            wx.navigateTo({
-              url: '../storageConsole/storageConsole'
-            })
-          },
-          fail: e => {
-            console.error('[上传文件] 失败：', e)
-            wx.showToast({
-              icon: 'none',
-              title: '上传失败',
-            })
-          },
-          complete: () => {
-            wx.hideLoading()
-          }
-        })
-
-      },
-      fail: e => {
-        console.error(e)
+  //  统一管理点击事件
+  handleTap(e) {
+    const that = this;
+    if (that.data.isAuth) {
+      const type = e.currentTarget.dataset.type;
+      switch (type) {
+        //  登录
+        case 'login':
+          // routerPush(`/pages/login/login`);
+          Toast(`好啦好啦,我知道你的头像好看`)
+          break;
+        //  好友列表
+        case 'buddy':
+          routerPush(`/pages/partner/partner`);
+          break;
+        //  我的账单
+        case 'bill':
+          routerPush(`/pages/bill/bill`);
+          break;
+        //  添加账单
+        case 'add':
+          setData.call(that, { billShow: true })
+          break;
+        default:
+          Toast(`哎呀,迷路了呢~`)
       }
+    } else {
+      setData.call(this, { isAuthPop: true })
+      // routerPush(`/pages/login/login`);
+    }
+  },
+  onClose() {
+    setData.call(this, { billShow: false })
+  },
+  //  选择小伙伴
+  clicks() {
+    //  注册通知事件
+    notification.addNotification('changeUser', this.buddyNotification, this )
+    routerPush(`/pages/select/select`)
+  },
+  //  选择小伙伴通知事件
+  buddyNotification(info) {
+    const buddyNameList = info.map(v => v.name);
+    const buddyIdList = info.map(v => v.openid);
+    setData.call(this, {
+      'form.buddyList': info,
+      'form.buddyNameList': buddyNameList,
+      'form.buddyIdList': buddyIdList
     })
   },
-
+  //  添加账单
+  comfirm() {
+    const that = this;
+    const data = that.data.form;
+    const params = {
+      billName: data.detailsMsg,
+      moeny: data.number,
+      isAverage: true,
+      menber: data.buddyList
+    }
+    if (!params.billName) {
+      Toast(`没有名称不能记录呀!`);
+      return false;
+    } else if (!params.moeny) {
+      Toast(`没有金额也不能记录呀!`);
+      return false;
+    } else if (!params.menber.length) {
+      Toast(`至少选择一人一起分账~`)
+    } else {
+      api.addBill(params)
+        .then(res => {
+          Toast(res.msg);
+          that.onClose()
+        })
+    }
+  },
+  //  退出pop时清除
+  handleClose() {
+    const form = {
+      detailsMsg: '',
+      number: '',
+      buddyNameList: [],
+      buddyIdList: []
+    }
+    setData.call(this, { form })
+  },
+  //  授权成功
+  changeStatus(e) {
+    this.setData({
+      isAuthPop: false,
+      isAuth: true,
+      logged: true,
+      avatarUrl: e.detail.avatarUrl,
+      userInfo: e.detail
+    })
+  }
 })

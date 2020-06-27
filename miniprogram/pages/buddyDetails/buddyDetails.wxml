@@ -1,0 +1,18 @@
+<view class="xhx-main">
+  <view class="main-head">
+    <text>总金额: </text>
+    <text class="{{ totalPirc >= 0 ? 'success' : 'danger' }}">{{ totalPirc }}</text>
+  </view>
+  <van-cell-group>
+    <block wx:for="{{ list }}" wx:key="index">
+      <van-cell
+        center="true"
+        custom-class="test"
+        title="{{ item.billName }}" >
+        <view class="text {{ item.status ? 'success' : 'danger' }}">
+          {{ item.money }}
+        </view>
+      </van-cell>
+    </block>
+  </van-cell-group>
+</view>

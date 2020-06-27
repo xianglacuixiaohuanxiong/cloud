@@ -1,0 +1,6 @@
+/miniprogram/node_modules/@vant/weapp/
+/cloudfunctions/add_bill/node_modules/
+/cloudfunctions/add_partner/node_modules/
+/cloudfunctions/get_userInfo/node_modules/
+/cloudfunctions/partner_list/node_modules/
+/cloudfunctions/query_bill/node_modules/

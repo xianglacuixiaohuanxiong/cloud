@@ -6,18 +6,37 @@ cloud.init({
 })
 
 //  引入数据库
-const db = cloud.database()
+const db = cloud.database().collection('user')
 const _ = db.command
 // 云函数入口函数
 exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext()
-  try {
-    return await db.collection('user').where({
-      openid: wxContext.OPENID,
-    }).update({
-      data: event
-    })
-  } catch (e) {
-    console.err(`没有查询到改用户,快去新增!!`)
+  const status = await db.where({
+    openid: wxContext.OPENID,
+  }).get()
+  if (status.data.length) {
+    //  更新数据
+    try {
+      db.doc(status.data[0]._id).set({
+        data: event
+      })
+      return await db.where({
+        openid: wxContext.OPENID,
+      }).get()
+    } catch (e) {
+      console.log(e)
+    }
+  } else {
+    //  新增数据
+    try {
+      db.add({
+        data: event
+      })
+      return await db.where({
+        openid: wxContext.OPENID,
+      }).get()
+    } catch (e) {
+      console.log(e)
+    }
   }
 }

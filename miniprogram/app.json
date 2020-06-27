@@ -1,6 +1,8 @@
 {
   "pages": [
     "pages/index/index",
+    "pages/partner/partner",
+    "pages/select/select",
     "pages/userConsole/userConsole",
     "pages/storageConsole/storageConsole",
     "pages/databaseGuide/databaseGuide",
@@ -20,6 +22,9 @@
     "navigationBarBackgroundColor": "#F6F6F6",
     "navigationBarTitleText": "云开发 QuickStart",
     "navigationBarTextStyle": "black"
+  },
+  "usingComponents": {
+    "loading": "/components/loading/loading"
   },
   "sitemapLocation": "sitemap.json",
   "style": "v2"

@@ -1,0 +1,34 @@
+<view class="xhx-main">
+  <view class="main-head">
+    <view class="text-item">
+      <text>{{ '消费金额：' }}</text>
+      <text class="{{ list.state ? 'success' : 'danger' }}">{{ list.number }}</text>
+    </view>
+  </view>
+  <view class="body">
+    <block wx:if="{{ isNull }}">
+      <van-index-bar>
+        <block wx:for="{{ list.list }}" wx:key="key" wx:for-index="key" wx:for-item="items">
+          <van-index-anchor index="{{ items.name }}" />
+          <block wx:for="{{ items.items }}" wx:key="inx" wx:for-item="val" wx:for-index="inx">
+            <van-cell
+              center="true"
+              bindtap="jump"
+              data-id="{{ val.openid }}"
+              title="{{ val.nickName }}">
+              <image slot="icon" class="avatar" src="{{ val.avatarUrl }}"></image>
+            </van-cell>
+          </block>
+        </block>
+      </van-index-bar>
+    </block>
+    <block wx:else>
+      <view class="null">
+        <text>点击右下角添加好友吧~</text>
+      </view>
+    </block>
+  </view>
+</view>
+<view class="add">
+  <van-button open-type="share" custom-class="icon" icon="plus" type="primary" />
+</view>

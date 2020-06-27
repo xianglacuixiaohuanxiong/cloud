@@ -1,0 +1,66 @@
+.xhx-main {
+  .main-head {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding: 15px 0;
+    box-sizing: border-box;
+    //background-image: linear-gradient(#66ccff, #66ddff);
+    border-bottom: 10px solid #f2f2f2;
+    background-image: linear-gradient(125deg, #1abc9c, #2ecc71, #3498db, #9b59b6, #34495e);
+    background-size: 400%;
+    animation: backgroundAnimati 15s linear infinite;
+    .user-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: 3px solid #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: #fff;
+    }
+    .user-name {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #fff;
+    }
+  }
+  .main-list {
+    background-color: #fff;
+    &-item {
+    }
+  }
+}
+//  添加按钮样式
+.add {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  .icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    box-shadow: 0 10px 10px -10px #000;
+  }
+}
+//  弹窗内容样式
+.pop-main {
+  padding: 30px 15px 10px;
+  .btn {
+    width: 100%;
+    margin-top: 20px;
+  }
+}
+@keyframes backgroundAnimati {
+  0% {
+    background-position: 0 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
+}

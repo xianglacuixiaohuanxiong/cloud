@@ -1,0 +1,11 @@
+.xhx-main .main-head {
+  padding: 10px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  border-bottom: 10px solid #f2f2f2;
+}
+.xhx-main .main-head .test .text {
+  line-height: 1;
+}

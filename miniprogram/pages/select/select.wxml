@@ -1,0 +1,35 @@
+<block wx:if="{{ !isLoading }}">
+  <view class="select-main">
+    <van-index-bar>
+      <block wx:for="{{ list.list }}" wx:key="key" wx:for-index="key" wx:for-item="items">
+        <van-index-anchor index="{{ items.name }}" />
+        <van-checkbox-group value="{{ result }}" bind:change="onChange">
+          <van-cell-group>
+            <block wx:for="{{ items.items }}" wx:key="inx" wx:for-item="val" wx:for-index="inx">
+              <van-cell
+                center="true"
+                title="{{ val.nickName }}"
+                value-class="value-class"
+                clickable
+                data-index="{{ val.openid }}"
+                bind:click="toggle">
+                <image slot="icon" class="avatar" src="{{ val.avatarUrl }}"></image>
+                <van-checkbox
+                  catch:tap="noop"
+                  checked-color="#07c160"
+                  class="checkboxes-{{ val.openid }}"
+                  name="{{ val.openid }},{{ val.nickName }}"/>
+              </van-cell>
+            </block>
+          </van-cell-group>
+        </van-checkbox-group>
+      </block>
+    </van-index-bar>
+  </view>
+  <view class="btn-box">
+    <van-button type="primary" block custom-class="btn" bindtap="confirm">确认</van-button>
+  </view>
+</block>
+<block wx:else>
+  <loading />
+</block>
