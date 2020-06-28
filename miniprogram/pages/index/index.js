@@ -20,6 +20,7 @@ Page({
     form: {
       detailsMsg: '',
       number: '',
+      buddyList: [],
       buddyNameList: [],
       buddyIdList: []
     }
@@ -113,15 +114,20 @@ Page({
     const data = that.data.form;
     const params = {
       billName: data.detailsMsg,
-      moeny: data.number,
+      moeny: Number(data.number),
       isAverage: true,
       menber: data.buddyList
     }
+    console.log(!params.menber.length)
+    return
     if (!params.billName) {
       Toast(`没有名称不能记录呀!`);
       return false;
     } else if (!params.moeny) {
       Toast(`没有金额也不能记录呀!`);
+      return false;
+    } else if (isNaN(params.moeny)) {
+      Toast(`这个金额我也识别不到呀!`);
       return false;
     } else if (!params.menber.length) {
       Toast(`至少选择一人一起分账~`)

@@ -10,23 +10,23 @@
 		"minified": true,
 		"newFeature": true,
 		"coverView": true,
-		"nodeModules": true,
 		"autoAudits": false,
 		"showShadowRootInWxmlPanel": true,
 		"scopeDataCheck": false,
-		"uglifyFileName": false,
 		"checkInvalidKey": true,
 		"checkSiteMap": true,
 		"uploadWithSourceMap": true,
-		"compileHotReLoad": false,
 		"babelSetting": {
 			"ignore": [],
 			"disablePlugins": [],
 			"outputPath": ""
 		},
-		"useIsolateContext": true,
 		"useCompilerModule": false,
-		"userConfirmedUseCompilerModuleSwitch": false
+		"userConfirmedUseCompilerModuleSwitch": false,
+		"nodeModules": true,
+		"uglifyFileName": false,
+		"compileHotReLoad": false,
+		"useIsolateContext": true
 	},
 	"appid": "wx4c1b23a37d904aa7",
 	"projectname": "%E4%BA%91%E5%BC%80%E5%8F%91",

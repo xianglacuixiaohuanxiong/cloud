@@ -13,10 +13,8 @@ exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext()
   const openid = wxContext.OPENID;
   const list = await branchBill.where(_.and([{
-    // enterId: openid._.or(event.partnerId)
     enterId: _.or(_.eq(openid), _.eq(event.partnerId))
   },{
-    // outId: event.partnerId._.or(openid)
     outId: _.or(_.eq(openid), _.eq(event.partnerId))
   }])).get()
   list.data.map(v => {
