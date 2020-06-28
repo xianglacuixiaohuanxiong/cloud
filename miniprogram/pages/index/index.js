@@ -2,7 +2,7 @@ const app = getApp();
 import api from '../../api/index'
 import notification from '../../utils/wxNotification'
 import { auth, addPartner } from '../../utils/util'
-import { Toast, routerPush, getStorage, setData } from "../../utils/wx";
+import {Toast, routerPush, getStorage, setData, showLoading} from "../../utils/wx";
 Page({
   data: {
     isAuthPop: false,
@@ -75,7 +75,8 @@ Page({
           break;
         //  我的账单
         case 'bill':
-          routerPush(`/pages/bill/bill`);
+          Toast(`功能开发中...`)
+          // routerPush(`/pages/bill/bill`);
           break;
         //  添加账单
         case 'add':
@@ -118,8 +119,6 @@ Page({
       isAverage: true,
       menber: data.buddyList
     }
-    console.log(!params.menber.length)
-    return
     if (!params.billName) {
       Toast(`没有名称不能记录呀!`);
       return false;
@@ -132,6 +131,7 @@ Page({
     } else if (!params.menber.length) {
       Toast(`至少选择一人一起分账~`)
     } else {
+      showLoading(`正在分账~`)
       api.addBill(params)
         .then(res => {
           Toast(res.msg);
@@ -151,12 +151,13 @@ Page({
   },
   //  授权成功
   changeStatus(e) {
+    console.log(e)
     this.setData({
       isAuthPop: false,
       isAuth: true,
       logged: true,
       avatarUrl: e.detail.avatarUrl,
-      userInfo: e.detail
+      nickName: e.detail.nickName
     })
   }
 })

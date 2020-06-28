@@ -19,13 +19,14 @@ exports.main = async (event, context) => {
     })
     let isConfirm = []
     menberList.forEach(v => {
+      console.log(Number((event.moeny / event.menber.length).toFixed(2)))
       const promise = branchBill.add({
         data: {
           billName: event.billName,
           enterId: wxContext.OPENID,
           outId: v.openid,
           outName: v.name,
-          money: Number((event.moeny / event.menber.length).toFixed(2))
+          money: Number((event.moeny / event.menber.length + 1).toFixed(2))
         }
       })
       isConfirm.push(promise)

@@ -17,14 +17,20 @@ exports.main = async (event, context) => {
   },{
     outId: _.or(_.eq(openid), _.eq(event.partnerId))
   }])).get()
+  let totalMoney = 0
   list.data.map(v => {
     if (v.enterId === wxContext.OPENID) {
       v.status = 1
+      totalMoney = totalMoney + v.money
     } else {
       v.status = 0
+      totalMoney = totalMoney - v.money
     }
   })
   return await Promise.all(list.data).then(() => {
-    return list
+    return {
+      data: list.data,
+      totalMoney
+    }
   })
 }

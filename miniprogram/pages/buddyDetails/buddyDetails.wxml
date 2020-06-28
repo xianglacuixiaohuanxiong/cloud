@@ -1,7 +1,7 @@
 <view class="xhx-main">
   <view class="main-head">
     <text>总金额: </text>
-    <text class="{{ totalPirc >= 0 ? 'success' : 'danger' }}">{{ totalPirc }}</text>
+    <text class="{{ totalMoney >= 0 ? 'success' : 'danger' }}">{{ totalMoney }}</text>
   </view>
   <van-cell-group>
     <block wx:for="{{ list }}" wx:key="index">

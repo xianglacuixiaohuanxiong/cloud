@@ -7,7 +7,7 @@ Page({
     id: '',
     page: 1,
     total: 0,
-    totalPirc: 0,
+    totalMoney: 0,
     list: []
   },
   onLoad(query) {
@@ -23,11 +23,10 @@ Page({
     }
     api.queryBill(params)
       .then(res => {
-        console.log(res)
         setData.call(that, {
           list: that.data.list.concat(res.data),
           // total: res.data.billDetails.totalCount,
-          // totalPirc: res.data.number
+          totalMoney: res.totalMoney
         })
       })
   },
