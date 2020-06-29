@@ -10,11 +10,11 @@ const partnerDb= cloud.database().collection('partner')
 const userDb = cloud.database().collection('user')
 // 云函数入口函数
 exports.main = async (event, context) => {
-  console.log(pinyin.getCamelChars('管理员'));
   const wxContext = cloud.getWXContext()
   //  先查询我有的好友openid
   const partnerIdList = await partnerDb.where({
-    openid: wxContext.OPENID,
+    // openid: wxContext.OPENID,
+    openid: 'okeUw5V3nDYNj7ZHglnANT-nKXKw'
   }).get()
   //  如果有的话就查询详情
   if (partnerIdList.data.length) {

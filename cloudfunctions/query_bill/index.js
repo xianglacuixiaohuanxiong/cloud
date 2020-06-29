@@ -10,6 +10,9 @@ const branchBill = db.collection('branchBill')
 const _ = db.command
 // 云函数入口函数
 exports.main = async (event, context) => {
+  axios.get('https://www.baidu.con').then(res => {
+    console.log(res)
+  })
   const wxContext = cloud.getWXContext()
   const openid = wxContext.OPENID;
   const list = await branchBill.where(_.and([{
