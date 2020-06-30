@@ -46,7 +46,7 @@ exports.main = async (event, context) => {
       break;
     //  添加账单
     case 'put_userBill':
-      data = (await axios.put(url + api, {
+      data = (await axios.put(url + api.split('_')[1], {
         detailsMsg: event.detailsMsg,
         number: event.number,
         toUserIds: event.toUserIds,
