@@ -9,14 +9,14 @@
     <block wx:if="{{ isNull }}">
       <van-index-bar>
         <block wx:for="{{ list.list }}" wx:key="key" wx:for-index="key" wx:for-item="items">
-          <van-index-anchor index="{{ items.name }}" />
-          <block wx:for="{{ items.items }}" wx:key="inx" wx:for-item="val" wx:for-index="inx">
+          <van-index-anchor index="{{ key }}" />
+          <block wx:for="{{ items }}" wx:key="inx" wx:for-item="val" wx:for-index="inx">
             <van-cell
               center="true"
               bindtap="jump"
-              data-id="{{ val.openid }}"
-              title="{{ val.nickName }}">
-              <image slot="icon" class="avatar" src="{{ val.avatarUrl }}"></image>
+              data-id="{{ val.userId }}"
+              title="{{ val.title }}">
+              <image slot="icon" class="avatar" src="{{ val.img }}"></image>
             </van-cell>
           </block>
         </block>

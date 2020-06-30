@@ -2,23 +2,23 @@
   <view class="select-main">
     <van-index-bar>
       <block wx:for="{{ list.list }}" wx:key="key" wx:for-index="key" wx:for-item="items">
-        <van-index-anchor index="{{ items.name }}" />
+        <van-index-anchor index="{{ key }}" />
         <van-checkbox-group value="{{ result }}" bind:change="onChange">
           <van-cell-group>
-            <block wx:for="{{ items.items }}" wx:key="inx" wx:for-item="val" wx:for-index="inx">
+            <block wx:for="{{ items }}" wx:key="inx" wx:for-item="val" wx:for-index="inx">
               <van-cell
                 center="true"
-                title="{{ val.nickName }}"
+                title="{{ val.title }}"
                 value-class="value-class"
                 clickable
-                data-index="{{ val.openid }}"
+                data-index="{{ val.userId }}"
                 bind:click="toggle">
-                <image slot="icon" class="avatar" src="{{ val.avatarUrl }}"></image>
+                <image slot="icon" class="avatar" src="{{ val.img }}"></image>
                 <van-checkbox
                   catch:tap="noop"
                   checked-color="#07c160"
-                  class="checkboxes-{{ val.openid }}"
-                  name="{{ val.openid }},{{ val.nickName }}"/>
+                  class="checkboxes-{{ val.userId }}"
+                  name="{{ val.userId }},{{ val.title }}"/>
               </van-cell>
             </block>
           </van-cell-group>

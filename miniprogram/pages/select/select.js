@@ -1,7 +1,7 @@
 const app = getApp()
 import api from '../../api/index'
 import notification from '../../utils/wxNotification'
-import {routerBack, routerPush, setData} from "../../utils/wx";
+import {getStorage, routerBack, routerPush, setData} from '../../utils/wx';
 
 Page({
   data: {
@@ -14,7 +14,7 @@ Page({
   },
   //  获取用户信息
   getData() {
-    api.queryPartnerList()
+    api.allApi({ api: 'friends', token: getStorage('xxhToken') })
       .then(res => {
         setData.call(this, { list: res.data, isLoading: false })
       })
@@ -36,7 +36,7 @@ Page({
     const [ ...data ] = that.data.result;
     let info = data.map(item => {
       item = { val: item };
-      item.openid = item.val.split(',')[0];
+      item.id = item.val.split(',')[0];
       item.name = item.val.split(',')[1];
       delete item.val
       return item

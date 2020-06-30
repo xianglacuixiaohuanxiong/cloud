@@ -1,6 +1,6 @@
 const app = getApp()
 import api from '../../api/index'
-import { routerPush, setData } from "../../utils/wx";
+import { routerPush, setData, getStorage } from "../../utils/wx";
 
 Page({
   data: {
@@ -15,7 +15,7 @@ Page({
   },
   //  获取用户信息
   getData() {
-    api.queryPartnerList()
+    api.allApi({ api: 'friends', token: getStorage('xxhToken') })
       .then(res => {
         const isNull = Object.keys(res.data.list);
         setData.call(this, { list: res.data, isNull })
@@ -30,7 +30,8 @@ Page({
   onShareAppMessage() {
     return {
       title: `点击成为我的好友!`,
-      path: `/pages/index/index?id=${app.globalData.userInfo.openid}`
+      path: `/pages/index/index?id=${app.globalData.userInfo.id}`,
+      imageUrl: '../../assets/img/share.jpg'
     }
   }
 })

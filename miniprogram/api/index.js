@@ -1,7 +1,11 @@
 import { axios } from '../utils/request'
+//  统一接口
+function allApi (params) {
+  return axios('get_api', params)
+}
 //  登录
-function login () {
-  return axios('login', {});
+function login (params) {
+  return axios('login', params);
 }
 
 //  存储用户信息
@@ -40,5 +44,6 @@ export default {
   addPartner,
   queryPartnerList,
   addBill,
-  queryBill
+  queryBill,
+  allApi
 }

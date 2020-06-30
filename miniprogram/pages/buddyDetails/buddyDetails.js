@@ -1,7 +1,6 @@
 const app = getApp()
 import api from '../../api/index'
-import { setData, Toast } from "../../utils/wx"
-
+import { getStorage, setData, Toast } from '../../utils/wx';
 Page({
   data: {
     id: '',
@@ -15,18 +14,20 @@ Page({
     setData.call(this, { id })
     this.getData(id)
   },
-  getData(partnerId) {
+  getData(toUserId) {
     const that = this;
     const params = {
       page: that.data.page,
-      partnerId
+      toUserId,
+      token: getStorage('xxhToken'),
+      api: 'toFriends'
     }
-    api.queryBill(params)
+    api.allApi(params)
       .then(res => {
         setData.call(that, {
-          list: that.data.list.concat(res.data),
-          // total: res.data.billDetails.totalCount,
-          totalMoney: res.totalMoney
+          list: that.data.list.concat(res.data.billDetails.data),
+          total: res.data.billDetails.totalCount,
+          totalPirc: res.data.number
         })
       })
   },

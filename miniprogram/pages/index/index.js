@@ -28,26 +28,18 @@ Page({
   onLoad (query) {
     const that = this;
     //  注册通知
-    if (query.id) app.globalData.partnerId = query.id;
-    auth()
-      .then(_ => {
-        if (query.id) addPartner();
+    if (query.id) app.globalData.friendsId = query.id;
+    app._init(res => {
+      if (res) {
         setData.call(that, {
           isAuth: true,
           nickName: app.globalData.userInfo.nickName,
           avatarUrl: app.globalData.userInfo.avatarUrl,
         })
-      })
-      .catch(err => {
-        if (!err) {
-          //  没有授权
-        } else {
-          //  别的情况
-        }
-      })
-      .finally(() => {
-        setData.call(that, { isLoading: false })
-      })
+        if (query.id) addPartner();
+      }
+      setData.call(that, { isLoading: false })
+    })
   },
   onShow () {
     //
@@ -75,8 +67,8 @@ Page({
           break;
         //  我的账单
         case 'bill':
-          Toast(`功能开发中...`)
-          // routerPush(`/pages/bill/bill`);
+          // Toast(`功能开发中...`)
+          routerPush(`/pages/bill/bill`);
           break;
         //  添加账单
         case 'add':
@@ -102,7 +94,7 @@ Page({
   //  选择小伙伴通知事件
   buddyNotification(info) {
     const buddyNameList = info.map(v => v.name);
-    const buddyIdList = info.map(v => v.openid);
+    const buddyIdList = info.map(v => v.id);
     setData.call(this, {
       'form.buddyList': info,
       'form.buddyNameList': buddyNameList,
@@ -114,28 +106,35 @@ Page({
     const that = this;
     const data = that.data.form;
     const params = {
-      billName: data.detailsMsg,
-      moeny: Number(data.number),
-      isAverage: true,
-      menber: data.buddyList
+      api: 'put_userBill',
+      token: getStorage('xxhToken'),
+      detailsMsg: data.detailsMsg,
+      number: data.number,
+      toUserIds: data.buddyIdList.join()
     }
-    if (!params.billName) {
+    if (!params.detailsMsg) {
       Toast(`没有名称不能记录呀!`);
       return false;
-    } else if (!params.moeny) {
+    } else if (!params.number) {
       Toast(`没有金额也不能记录呀!`);
       return false;
-    } else if (isNaN(params.moeny)) {
+    } else if (isNaN(params.number)) {
       Toast(`这个金额我也识别不到呀!`);
       return false;
-    } else if (!params.menber.length) {
+    } else if (!params.toUserIds.length) {
       Toast(`至少选择一人一起分账~`)
     } else {
       showLoading(`正在分账~`)
-      api.addBill(params)
+      api.allApi(params)
         .then(res => {
           Toast(res.msg);
           that.onClose()
+        })
+        .catch(err => {
+          Toast(`分账失败`);
+        })
+        .finally(() => {
+          wx.hideLoading();
         })
     }
   },

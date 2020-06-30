@@ -1,6 +1,6 @@
 const app = getApp()
 import api from '../api/index'
-import { Toast } from "./wx";
+import {getStorage, Toast} from './wx';
 //  是否授权
 export function auth() {
   return new Promise((resolve, reject) => {
@@ -23,9 +23,12 @@ export function auth() {
 //  添加好友
 export function addPartner() {
   const params = {
-    partnerId: app.globalData.partnerId,
+    userId: app.globalData.userInfo.id,
+    toUserId: app.globalData.friendsId,
+    token: getStorage('xxhToken'),
+    api: 'post_friends'
   }
-  api.addPartner(params).then(res => {
+  api.allApi(params).then(res => {
     Toast(res.msg)
   })
 }

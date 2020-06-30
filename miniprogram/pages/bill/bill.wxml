@@ -1,0 +1,24 @@
+<view class="xhx-main">
+  <view class="main-head">
+    <view class="head-item">
+      <text>应收入: </text>
+      <text class="success">{{ reduceNumber }}</text>
+    </view>
+    <view class="head-item">
+      <text>总支出: </text>
+      <text class="danger">{{ plusNumber }}</text>
+    </view>
+  </view>
+  <van-cell-group>
+    <block wx:for="{{ list }}" wx:key="index">
+      <van-cell
+        center="true"
+        custom-class="test"
+        title="{{ item.detailsMsg }}" >
+        <view class="text {{ item.duitStatus ? 'success' : 'danger' }}">
+          {{ item.number }}
+        </view>
+      </van-cell>
+    </block>
+  </van-cell-group>
+</view>
