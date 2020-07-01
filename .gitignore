@@ -4,3 +4,5 @@
 /cloudfunctions/get_userInfo/node_modules/
 /cloudfunctions/partner_list/node_modules/
 /cloudfunctions/query_bill/node_modules/
+/cloudfunctions/login/node_modules/
+/cloudfunctions/get_api/node_modules/
